@@ -36,7 +36,11 @@ const userSchema = new Schema({
     meals: [{
         type: Schema.Types.ObjectId,
         ref: 'Meal',
-    }]
+    }],
+    recommendMeals: [{
+        type: Schema.Types.ObjectId,
+        ref: 'RecommendMeal',
+    }],
 }, { timestamps: true});
 
 module.exports = mongoose.model('User', userSchema);
