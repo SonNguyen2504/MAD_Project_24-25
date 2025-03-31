@@ -26,6 +26,13 @@ const userSchema = new Schema({
         type: Number,  
         required: true,
     },
+    weightGoal: {
+        type: Number,
+        required: true,
+    }, 
+    steps: {
+        type: Number,
+    },
     target: {
         type: String,
         enum: ['Giảm cân', 'Tăng cân', 'Giữ cân'],

@@ -2,7 +2,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const mealSchema = new Schema({
-    breakfast: [
+    session: {
+        type: String,
+        required: true,
+        enum: ['breakfast', 'lunch', 'dinner', 'snacks'],
+    },
+    foodsInMeal: [
         {
             food: {
                 type: Schema.Types.ObjectId,
@@ -14,42 +19,10 @@ const mealSchema = new Schema({
             }
         }
     ],
-    lunch: [
-        {
-            food: {
-                type: Schema.Types.ObjectId,
-                ref: 'Food',
-            },
-            quantity: {
-                type: Number,
-                required: true,
-            }
-        }
-    ],
-    dinner: [
-        {
-            food: {
-                type: Schema.Types.ObjectId,
-                ref: 'Food',
-            },
-            quantity: {
-                type: Number,
-                required: true,
-            }
-        }
-    ],
-    snacks: [
-        {
-            food: {
-                type: Schema.Types.ObjectId,
-                ref: 'Food',
-            },
-            quantity: {
-                type: Number,
-                required: true,
-            }
-        }
-    ],
+    totalCalories: {
+        type: Number,
+        required: true,
+    },
 }, { timestamps: true });
 
 const Meal = mongoose.model('Meal', mealSchema);
