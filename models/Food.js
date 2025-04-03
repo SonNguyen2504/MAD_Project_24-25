@@ -6,7 +6,7 @@ const foodSchema = new Schema({
         type: String,
         required: true,
     },
-    weight: {
+    unit: {
         type: Number,
         required: true,
     }, 

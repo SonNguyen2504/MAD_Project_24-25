@@ -4,10 +4,11 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
     username: {
         type: String,
-        required: true,
+        // required: true,
     },
     email: {
         type: String,
+        unique: true,
         required: true,
     },
     password: {
@@ -16,19 +17,19 @@ const userSchema = new Schema({
     },
     age: {
         type: Number,
-        required: true,
+        // required: true,
     },
     height: {
         type: Number,
-        required: true,
+        // required: true,
     },
     weight: {
         type: Number,  
-        required: true,
+        // required: true,
     },
     weightGoal: {
         type: Number,
-        required: true,
+        // required: true,
     }, 
     steps: {
         type: Number,
@@ -40,14 +41,26 @@ const userSchema = new Schema({
     dailyCalorieTarget: {
         type: Number,
     },
-    meals: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Meal',
-    }],
-    recommendMeals: [{
+    isVerify: {
+        type: Boolean,
+        default: false,
+    },
+    verificationCode: {
+        type: String,
+    },
+    forgotPasswordCode: {
+        type: String,
+    },
+    meals: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Meal',
+        }
+    ],
+    recommendMeals: {
         type: Schema.Types.ObjectId,
         ref: 'RecommendMeal',
-    }],
+    },
 }, { timestamps: true});
 
 module.exports = mongoose.model('User', userSchema);
