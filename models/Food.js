@@ -30,11 +30,6 @@ const foodSchema = new Schema({
         type: String,
         required: true,
     },
-    foodType: {
-        type: String,
-        required: true,
-        enum: ['system', 'mine'],
-    }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Food', foodSchema);
