@@ -101,6 +101,10 @@ const login = async (req, res) => {
             return res.status(400).json({ message: 'Tài khoản Email không chính xác' });
         }
 
+        if (!user.isVerify) {
+            return res.status(400).json({ message: 'Tài khoản chưa được xác thực' });
+        }
+
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: 'Mật khẩu chưa chính xác' });
@@ -108,7 +112,7 @@ const login = async (req, res) => {
 
         // Generate JWT token
         const token = jwt.sign(
-            { id: user._id }, 
+            { userId: user._id }, 
             process.env.TOKEN_KEY, 
             { expiresIn: '1h' }
         );
@@ -130,6 +134,10 @@ const getForgotPasswordCode = async (req, res) => {
         const existingUser = await User.findOne({ email });
         if (!existingUser) {
             return res.status(400).json({ message: 'Email không tồn tại' });
+        }
+
+        if (!existingUser.isVerify) {
+            return res.status(400).json({ message: 'Tài khoản chưa được xác thực' });
         }
 
         // Generate a random verification code
