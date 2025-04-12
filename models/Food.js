@@ -26,6 +26,12 @@ const foodSchema = new Schema({
         type: Number,
         required: true,
     },
+    foodType: {
+        type: String,
+        enum: ['system', 'user'],
+        default: 'system',
+        required: true,
+    },
     image: {
         type: String,
         required: true,

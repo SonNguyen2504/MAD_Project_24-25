@@ -12,6 +12,15 @@ const swaggerDefinition = {
         version: '1.0.0',
         description: 'Documentation for your API',
     },
+    components: {
+        securitySchemes: {
+            bearerAuth: {
+                type: "http",
+                scheme: "bearer",
+                bearerFormat: "JWT",
+            },
+        },
+    },
     servers: [
         {
             url: `http://localhost:${process.env.PORT}`, // Thay bằng URL thực tế của bạn

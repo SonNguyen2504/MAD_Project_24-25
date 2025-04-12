@@ -15,6 +15,9 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
+    gender: {
+        type: String,
+    },
     age: {
         type: Number,
         // required: true,
@@ -26,6 +29,13 @@ const userSchema = new Schema({
     weight: {
         type: Number,  
         // required: true,
+    },
+    bmi: {
+        type: Number,
+        // required: true,
+    },
+    bodyState: {
+        type: String,
     },
     weightGoal: {
         type: Number,
