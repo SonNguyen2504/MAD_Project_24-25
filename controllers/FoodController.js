@@ -1,9 +1,245 @@
 const Food = require('../models/Food');
 
-const testRoute = (req, res) => {
-    res.status(200).json({ message: 'Test route is working!' });
+const createFood = async(req, res) => {
+    const { foodName, unit, calories, protein, carbs, fats, image, foodType } = req.body;
+
+    try {
+        const newFood = new Food({
+            foodName,
+            unit,
+            calories,
+            protein,
+            carbs,
+            fats,
+            image,
+            foodType: foodType || 'system',
+        });
+
+        await newFood.save();
+
+        return res.status(200).json({
+            success: true,
+            message: 'Thêm thực phẩm thành công',
+            food: newFood,
+        });
+    } catch(error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Lỗi máy chủ nội bộ',
+            error: error.message,
+        });
+    }
+}
+
+const getAllFood = async(req, res) => {
+    try {
+        const foods = await Food.find({});
+
+        if(!foods) {
+            return res.status(404).json({
+                success: false,
+                message: 'Danh sách thực phẩm trống',
+            });
+        }
+        
+        return res.status(200).json({
+            success: true,
+            message: 'Danh sách thực phẩm',
+            foods: foods,
+        })
+    } catch(error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Lỗi máy chủ nội bộ',
+            error: error.message,
+        });
+    }
+}
+
+const getAllFoodSystem = async(req, res) => {
+    try {
+        const foods = await Food.find({ foodType: 'system' });
+
+        if(!foods) {
+            return res.status(404).json({
+                success: false,
+                message: 'Danh sách thực phẩm trống',
+            });
+        }
+        
+        return res.status(200).json({
+            success: true,
+            message: 'Danh sách thực phẩm',
+            foods: foods,
+        })
+    } catch(error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Lỗi máy chủ nội bộ',
+            error: error.message,
+        });
+    }
+}
+
+const getAllFoodUser = async(req, res) => {
+    try {
+        const foods = await Food.find({ foodType: 'user' });
+
+        if(!foods) {
+            return res.status(404).json({
+                success: false,
+                message: 'Danh sách thực phẩm trống',
+            });
+        }
+        
+        return res.status(200).json({
+            success: true,
+            message: 'Danh sách thực phẩm',
+            foods: foods,
+        })
+    } catch(error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Lỗi máy chủ nội bộ',
+            error: error.message,
+        });
+    }
+}
+
+const getFoodById = async(req, res) => {
+    const { id } = req.params;
+
+    try {
+        const food = await Food.findById(id);
+
+        if(!food) {
+            return res.status(404).json({
+                success: false,
+                message: `Thực phẩm với id: ${id} không tồn tại`,
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: `Thông tin thực phẩm có id: ${id}`,
+            food: food,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Lỗi máy chủ nội bộ',
+            error: error.message,
+        });
+    }
+}
+
+const updateFood = async(req, res) => {
+    const { id } = req.params;
+    const { foodName, unit, calories, protein, carbs, fats, image } = req.body;
+
+    try {
+        const food = await Food.findByIdAndUpdate(id, {
+            foodName,
+            unit,
+            calories,
+            protein,
+            carbs,
+            fats,
+            image,
+        }, { new: true });
+
+        if(!food) {
+            return res.status(404).json({
+                success: false,
+                message: `Thực phẩm với id: ${id} không tồn tại`,
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: 'Cập nhật thực phẩm thành công',
+            food: food,
+        });
+    } catch(error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Lỗi máy chủ nội bộ',
+            error: error.message,
+        });
+    }
+}
+
+const deleteFood = async(req, res) => {
+    const { id } = req.params;
+
+    try {
+        const food = await Food.findByIdAndDelete(id);
+
+        if(!food) {
+            return res.status(404).json({
+                success: false,
+                message: `Thực phẩm với id: ${id} không tồn tại`,
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: 'Xóa thực phẩm thành công',
+        });
+    } catch(error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Lỗi máy chủ nội bộ',
+            error: error.message,
+        });
+    }
+}
+
+const searchFoodByName = async(req, res) => {
+    console.log('req.query : ', req.query);
+
+    try {
+        const { foodName } = req.query;
+
+        if(!foodName) {
+            return res.status(400).json({
+                success: false,
+                message: 'Tên thực phẩm không được để trống',
+            });
+        }
+
+        const foods = await Food.find({ 
+            foodName: { $regex: foodName, $options: 'i' } 
+        });
+
+        if(!foods || foods.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy thực phẩm',
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: 'Danh sách thực phẩm tìm thấy',
+            foods: foods,
+        });
+    } catch(error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Lỗi máy chủ nội bộ',
+            error: error.message,
+        });
+    }
 }
 
 module.exports = {
-    testRoute,
+    createFood,
+    getAllFood,
+    getAllFoodSystem,
+    getAllFoodUser,
+    getFoodById,
+    updateFood,
+    deleteFood,
+    searchFoodByName,
 };
