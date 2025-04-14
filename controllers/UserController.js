@@ -29,7 +29,11 @@ const setInformation = async (req, res) => {
 
     } catch (error) {
         console.error('Lỗi khởi tạo thông tin người dùng: ', error);
-        return res.status(500).json({ message: 'Lỗi máy chủ cục bộ' });
+        return res.status(500).json({ 
+            success: false,
+            message: 'Lỗi máy chủ cục bộ',
+            error: error.message,
+         });
     }
 }
 
@@ -47,7 +51,11 @@ const getUserInformation = async (req, res) => {
         })
     } catch (error) {
         console.error('Lỗi lấy thông tin người dùng: ', error);
-        return res.status(500).json({ message: 'Lỗi máy chủ cục bộ' });
+        return res.status(500).json({
+            success: false,
+            message: 'Lỗi máy chủ cục bộ',
+            error: error.message,
+        });
     }
 }
 
@@ -79,7 +87,11 @@ const updateUserInformation = async (req, res) => {
 
     } catch (error) {
         console.error('Lỗi cập nhật thông tin người dùng: ', error);
-        return res.status(500).json({ message: 'Lỗi máy chủ cục bộ' });
+        return res.status(500).json({
+            success: false,
+            message: 'Lỗi máy chủ cục bộ',
+            error: error.message,
+        });
     }
 }
 
@@ -111,7 +123,11 @@ const changePassword = async(req, res) => {
         })
     } catch (error) {
         console.error('Lỗi thay đổi mật khẩu: ', error);
-        return res.status(500).json({ message: 'Lỗi máy chủ cục bộ' });
+        return res.status(500).json({ 
+            success: false,
+            message: 'Lỗi máy chủ cục bộ',
+            error: error.message,
+        });
     }
 
 }
