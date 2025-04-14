@@ -7,7 +7,7 @@ const foodSchema = new Schema({
         required: true,
     },
     unit: {
-        type: String,
+        type: Number,
         required: true,
     }, 
     calories: {
