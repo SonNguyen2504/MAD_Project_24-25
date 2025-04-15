@@ -49,6 +49,10 @@ const { verifyToken } = require('../middlewares/auth.js');
  *         dailyCalorieTarget:
  *           type: number
  *           example: 1400
+ *         activityLevel:
+ *           type: string    
+ *           enum: [Ít vận động, Vận động nhẹ, Vận động vừa, Vận động nhiều, Rất năng động]
+ *           example: Vận động nhẹ 
  *         bodyState:
  *           type: string
  *           example: Thừa cân

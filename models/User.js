@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
     username: {
         type: String,
-        // required: true,
+        required: true,
     },
     email: {
         type: String,
@@ -17,39 +17,41 @@ const userSchema = new Schema({
     },
     gender: {
         type: String,
+        required: true,
     },
     age: {
         type: Number,
-        // required: true,
+        required: true,
     },
     height: {
         type: Number,
-        // required: true,
+        required: true,
     },
     weight: {
         type: Number,  
-        // required: true,
+        required: true,
     },
     bmi: {
         type: Number,
-        // required: true,
+        required: true,
     },
     bodyState: {
         type: String,
     },
     weightGoal: {
         type: Number,
-        // required: true,
+        required: true,
     }, 
-    steps: {
-        type: Number,
-    },
     target: {
         type: String,
         enum: ['Giảm cân', 'Tăng cân', 'Giữ cân'],
     },
     dailyCalorieTarget: {
         type: Number,
+    },
+    activityLevel: {
+        type: String,
+        enum: ['Ít vận động', 'Vận động nhẹ', 'Vận động vừa', 'Vận động nhiều', 'Rất năng động'],
     },
     isVerify: {
         type: Boolean,
@@ -61,12 +63,6 @@ const userSchema = new Schema({
     forgotPasswordCode: {
         type: String,
     },
-    meals: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Meal',
-        }
-    ],
     recommendMeals: {
         type: Schema.Types.ObjectId,
         ref: 'RecommendMeal',
