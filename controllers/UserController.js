@@ -2,7 +2,7 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 
 const setInformation = async (req, res) => {
-    const { height, weight, gender, age, bmi, target, bodyState, weightGoal, dailyCalorieTarget } = req.body;
+    const { height, weight, gender, age, bmi, target, bodyState, weightGoal, dailyCalorieTarget, activityLevel } = req.body;
 
     try {
         const user = await User.findById(req.user._id).select('-password -verificationCode -isVerify');
@@ -19,6 +19,8 @@ const setInformation = async (req, res) => {
         user.dailyCalorieTarget = dailyCalorieTarget;
         user.bodyState = bodyState;
         user.weightGoal = weightGoal;
+        user.activityLevel = activityLevel;
+
         await user.save();
 
         return res.status(200).json({
@@ -61,7 +63,7 @@ const getUserInformation = async (req, res) => {
 
 const updateUserInformation = async (req, res) => {
     const id = req.user._id;
-    const { username, height, weight, gender, age, bmi, weightGoal } = req.body;
+    const { username, height, weight, gender, age, bmi, weightGoal, activityLevel } = req.body;
 
     try {
         const user = await User.findById(id).select('-password -verificationCode -isVerify');
@@ -69,7 +71,6 @@ const updateUserInformation = async (req, res) => {
             return res.status(404).json({ message: 'Người dùng không tồn tại' });
         }
 
-        // user.email = email;
         user.username = username;
         user.height = height;
         user.weight = weight;
@@ -77,6 +78,7 @@ const updateUserInformation = async (req, res) => {
         user.age = age;
         user.bmi = bmi;
         user.weightGoal = weightGoal;
+        user.activityLevel = activityLevel;
         await user.save();
 
         return res.status(200).json({
