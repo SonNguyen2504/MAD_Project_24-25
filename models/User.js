@@ -17,30 +17,31 @@ const userSchema = new Schema({
     },
     gender: {
         type: String,
-        required: true,
+        default: null,
     },
     age: {
         type: Number,
-        required: true,
+        default: null,
     },
     height: {
         type: Number,
-        required: true,
+        default: null,
     },
     weight: {
         type: Number,  
-        required: true,
+        default: null,
     },
     bmi: {
         type: Number,
-        required: true,
+        default: null,
     },
     bodyState: {
         type: String,
+        default: null,
     },
     weightGoal: {
         type: Number,
-        required: true,
+        default: null,
     }, 
     target: {
         type: String,
