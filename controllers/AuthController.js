@@ -62,7 +62,11 @@ const getVerificationCode = async (req, res) => {
         });
     } catch (error) {
         console.error('Lỗi đăng ký: ', error);
-        return res.status(500).json({ message: 'Lỗi máy chủ nội bộ' });
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message,
+        });
     }
 };
 
@@ -88,7 +92,11 @@ const verifyAccount = async (req, res) => {
         });
     } catch (error) {
         console.error('Lỗi xác thực tài khoản: ', error);
-        return res.status(500).json({ message: 'Lỗi máy chủ nội bộ' });
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message,
+        });
     }
 }
 
@@ -123,7 +131,11 @@ const login = async (req, res) => {
             token,
         });
     } catch (error) {
-        return res.status(500).json({ message: 'Lỗi máy chủ nội bộ' });
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message,
+        });
     }
 }
 
@@ -155,7 +167,11 @@ const getForgotPasswordCode = async (req, res) => {
         });
     } catch (error) {
         console.error('Lỗi khi gửi mã xác thực:', error);
-        return res.status(500).json({ message: 'Lỗi máy chủ nội bộ' });
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message,
+        });
     }
 }
 
@@ -180,7 +196,11 @@ const resetPassword = async(req, res) => {
         });
     } catch (error) {
         console.error('Lỗi khi đổi mật khẩu: ', error);
-        return res.status(500).json({ message: 'Lỗi máy chủ nội bộ' });
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message,
+        });
     }
 }
 
