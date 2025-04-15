@@ -2,7 +2,7 @@
  * @swagger
  * tags:
  *   name: Food
- *   description: Quản lý thực phẩm
+ *   description: API quản lý thực phẩm
  */
 
 /**
