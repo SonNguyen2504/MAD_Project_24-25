@@ -38,6 +38,9 @@ const {
  *               password:
  *                 type: string
  *                 example: 123456
+ *               confirmPassword:
+ *                 type: string
+ *                 example: 123456
  *     responses:
  *       200:
  *         description: Thành công

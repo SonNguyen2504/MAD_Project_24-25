@@ -32,13 +32,20 @@ const sendVerificationCode = async(email, verificationCode) => {
 }
 
 const getVerificationCode = async (req, res) => {
-    const { email, username, password } = req.body;
+    const { email, username, password, confirmPassword } = req.body;
 
     try {
         // Check if the email is already registered
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: 'Email đã được đăng ký, vui lòng chọn Email khác!' });
+        }
+
+        if (password !== confirmPassword) {
+            return res.status(400).json({
+                success: false,
+                message: 'Mật khẩu không khớp!',
+            });
         }
 
         // Generate a random verification code
