@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const feddbackSchema = new Schema({
+const noteSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User',
@@ -18,8 +18,9 @@ const feddbackSchema = new Schema({
     },
     rating: {
         type: String,
+        enum: ['Lành mạnh', 'Không lành mạnh'],
         required: true,
     },
 }, { timestamps: true });
 
-module.exports = mongoose.model('Feedback', feddbackSchema);
+module.exports = mongoose.model('Note', noteSchema);
