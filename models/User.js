@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
+    googleId: {
+        type: String,
+        default: null,
+        unique: true,
+    },
     username: {
         type: String,
         required: true,

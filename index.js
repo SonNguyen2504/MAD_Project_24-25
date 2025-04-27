@@ -1,8 +1,10 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const passport = require('passport');
 const route = require('./routes/index.js');
 
+require('./config/passport.js');
 const setupSwagger = require('./config/swagger.js');
 
 dotenv.config();
@@ -12,7 +14,11 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+}));
+app.use(passport.initialize());
 
 setupSwagger(app); // Setup Swagger for API documentation
 

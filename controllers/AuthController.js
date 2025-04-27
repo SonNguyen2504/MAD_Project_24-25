@@ -211,10 +211,24 @@ const resetPassword = async(req, res) => {
     }
 }
 
+const googleCallback = async (req, res) => {
+    const token = jwt.sign(
+        { userId: req.user._id }, 
+        process.env.TOKEN_KEY, 
+        { expiresIn: '1h' }
+    );
+
+    console.log('User:', req.user);
+    console.log('Token:', token);
+
+    res.redirect(`http://localhost:5500/test.html?token=${token}`);
+}
+
 module.exports = {
     getVerificationCode,
     verifyAccount,
     getForgotPasswordCode,
     resetPassword,
     login,
+    googleCallback,
 };
