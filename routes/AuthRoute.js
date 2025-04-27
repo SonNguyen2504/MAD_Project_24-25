@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
+const dotenv = require('dotenv');
 
 const {
     getVerificationCode,
@@ -7,6 +9,7 @@ const {
     login,
     getForgotPasswordCode,
     resetPassword,
+    googleCallback,
 } = require('../controllers/AuthController.js');
 
 /**
@@ -148,5 +151,19 @@ router.post('/getPasswordCode', getForgotPasswordCode);
  *         description: Thành công
  */
 router.post('/resetPassword', resetPassword);
+
+router.get('/google',
+    passport.authenticate('google', {
+        scope: ['profile', 'email'],
+        session: false,
+    })
+);
+
+router.get('/google/callback',
+    passport.authenticate('google', {
+        session: false,
+    }),
+    googleCallback
+);
 
 module.exports = router;
