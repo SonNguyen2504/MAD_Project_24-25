@@ -4,11 +4,13 @@ const passport = require('passport');
 const dotenv = require('dotenv');
 
 const {
-    getVerificationCode,
+    signup,
     verifyAccount,
     login,
     getForgotPasswordCode,
     resetPassword,
+    resendVerificationCode,
+    resendForgotPasswordCode,
     googleCallback,
 } = require('../controllers/AuthController.js');
 
@@ -21,9 +23,9 @@ const {
 
 /**
  * @swagger
- * /api/auth/getVerifyCode:
+ * /api/auth/signup:
  *   post:
- *     summary: Lấy mã xác thực cho tài khoản mới tạo
+ *     summary: Đăng ký tài khoản, lấy mã xác thực
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -48,7 +50,7 @@ const {
  *       200:
  *         description: Thành công
  */
-router.post('/getVerifyCode', getVerificationCode);
+router.post('/signup', signup);
 
 /**
  * @swagger
@@ -151,6 +153,50 @@ router.post('/getPasswordCode', getForgotPasswordCode);
  *         description: Thành công
  */
 router.post('/resetPassword', resetPassword);
+
+/**
+ * @swagger
+ * /api/auth/resendVerificationCode:
+ *   post:
+ *     summary: Gửi lại mã xác thực
+ *     tags: [Auth]
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *         schema:
+ *          type: object
+ *          properties:
+ *           email:
+ *            type: string
+ *            example: abc@gmail.com
+ *     responses:
+ *       200:
+ *         description: Thành công
+ */
+router.post('/resendVerificationCode', resendVerificationCode);
+
+/**
+ * @swagger
+ * /api/auth/resendForgotPasswordCode:
+ *   post:
+ *     summary: Gửi lại mã quên mật khẩu
+ *     tags: [Auth]
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *         schema:
+ *          type: object
+ *          properties:
+ *           email:
+ *            type: string
+ *            example: abc@gmail.com
+ *     responses:
+ *       200:
+ *         description: Thành công
+ */
+router.post('/resendForgotPasswordCode', resendForgotPasswordCode);
 
 router.get('/google',
     passport.authenticate('google', {

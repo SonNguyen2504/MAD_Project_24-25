@@ -31,7 +31,23 @@ const sendVerificationCode = async(email, verificationCode) => {
     }
 }
 
-const getVerificationCode = async (req, res) => {
+const sendForgotPasswordCode = async (email, forgotPasswordCode) => {
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'Yêu cầu đổi mật khẩu',
+        text: `Mã xác thực yêu cầu đổi mật khẩu của bạn là: ${forgotPasswordCode}`,
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log('Gửi mã xác thực yêu cầu đổi mật khẩu thành công!');
+    } catch (error) {
+        console.error('Lỗi khi gửi mã xác thực:', error);
+    }
+}
+
+const signup = async (req, res) => {
     const { email, username, password, confirmPassword } = req.body;
 
     try {
@@ -160,13 +176,13 @@ const getForgotPasswordCode = async (req, res) => {
         }
 
         // Generate a random verification code
-        const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+        const forgotPasswordCode = Math.floor(100000 + Math.random() * 900000).toString();
 
-        existingUser.forgotPasswordCode = verificationCode;
+        existingUser.forgotPasswordCode = forgotPasswordCode;
         await existingUser.save();
 
         // Send the verification code to the user's email
-        await sendVerificationCode(email, verificationCode);
+        await sendForgotPasswordCode(email, forgotPasswordCode);
 
         return res.status(200).json({ 
             success: true,
@@ -211,6 +227,65 @@ const resetPassword = async(req, res) => {
     }
 }
 
+const resendVerificationCode = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const existingUser = await User.findOne({ email });
+
+        if(!existingUser) {
+            return res.status(400).json({ message: 'Email không tồn tại' });
+        }
+
+        const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+        existingUser.verificationCode = verificationCode;
+        await existingUser.save();
+
+        await sendVerificationCode(email, verificationCode);
+
+        return res.status(200).json({
+            success: true,
+            message: 'Mã xác thực đã được gửi lại đến email của bạn!',
+        })
+
+    } catch(error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message,
+        });
+    }
+}
+
+const resendForgotPasswordCode = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const existingUser = await User.findOne({ email });
+
+        if(!existingUser) {
+            return res.status(400).json({ message: 'Email không tồn tại' });
+        }
+
+        const forgotPasswordCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+        existingUser.forgotPasswordCode = forgotPasswordCode;
+        await existingUser.save();
+
+        return res.status(200).json({
+            success: true,
+            message: 'Mã xác thực yêu cầu đổi mật khẩu đã được gửi lại đến email của bạn!',
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message,
+        });
+    }
+}
+
 const googleCallback = async (req, res) => {
     const token = jwt.sign(
         { userId: req.user._id }, 
@@ -228,10 +303,12 @@ const googleCallback = async (req, res) => {
 }
 
 module.exports = {
-    getVerificationCode,
+    signup,
     verifyAccount,
     getForgotPasswordCode,
     resetPassword,
     login,
+    resendVerificationCode,
+    resendForgotPasswordCode,
     googleCallback,
 };
