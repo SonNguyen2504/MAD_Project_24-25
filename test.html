@@ -1,0 +1,25 @@
+<!-- success.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Đăng nhập thành công</title>
+</head>
+<body>
+  <h2>Chào mừng bạn đã đăng nhập!</h2>
+  <p id="token-info"></p>
+
+  <script>
+    // Lấy token từ URL query param
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+
+    if (token) {
+      localStorage.setItem("token", token);
+      document.getElementById("token-info").innerText = "Token đã được lưu vào localStorage.";
+    } else {
+      document.getElementById("token-info").innerText = "Không tìm thấy token!";
+    }
+  </script>
+</body>
+</html>
