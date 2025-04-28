@@ -19,6 +19,7 @@ const setInformation = async (req, res) => {
         user.dailyCalorieTarget = dailyCalorieTarget;
         user.bodyState = bodyState;
         user.weightGoal = weightGoal;
+        user.isFirstLogin = false;
         user.activityLevel = activityLevel;
 
         await user.save();

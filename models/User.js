@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
     googleId: {
         type: String,
-        default: null,
         unique: true,
+        sparse: true,
     },
     username: {
         type: String,
@@ -33,7 +33,7 @@ const userSchema = new Schema({
         default: null,
     },
     weight: {
-        type: Number,  
+        type: Number,
         default: null,
     },
     bmi: {
@@ -47,7 +47,11 @@ const userSchema = new Schema({
     weightGoal: {
         type: Number,
         default: null,
-    }, 
+    },
+    isFirstLogin: {
+        type: Boolean,
+        default: true,
+    },
     target: {
         type: String,
         enum: ['Giảm cân', 'Tăng cân', 'Giữ cân'],
@@ -73,6 +77,6 @@ const userSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'RecommendMeal',
     },
-}, { timestamps: true});
+}, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);
