@@ -221,7 +221,10 @@ const googleCallback = async (req, res) => {
     console.log('User:', req.user);
     console.log('Token:', token);
 
-    res.redirect(`http://localhost:5500/test.html?token=${token}`);
+    if (req.user.isFirstLogin) {
+        return res.redirect(`http://localhost:5500/first.html?token=${token}`);
+    }
+    return res.redirect(`http://localhost:5500/test.html?token=${token}`);
 }
 
 module.exports = {
