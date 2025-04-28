@@ -1,27 +1,18 @@
+<!-- login.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>Đăng nhập</title>
 </head>
 <body>
-    
-    <script>
-        const getMondayOfWeek = (date) => {
-            const day = date.getDay() || 7; // Get current day number (1-7)
-            if (day !== 1) { // If it's not Monday
-                date.setHours(-24 * (day - 1)); // Set to previous Monday
-            }
-            // set the time to 00:00:00
-            date.setHours(0, 0, 0, 0); // Set time to 00:00:00
-            return date; // Return the modified date
-        }
+  <h2>Đăng nhập bằng Google</h2>
+  <button onclick="loginWithGoogle()">Đăng nhập với Google</button>
 
-        const t = getMondayOfWeek(new Date());
-
-        // output date with 00:00:00 time
-        console.log(t, typeof t); // Outputs the date of the Monday of the current week
-    </script>
+  <script>
+    function loginWithGoogle() {
+      window.location.href = 'http://localhost:3030/api/auth/google';
+    }
+  </script>
 </body>
 </html>
