@@ -34,9 +34,6 @@ const { verifyToken } = require('../middlewares/auth');
  *         content:
  *           type: string
  *           example: Uống ít nhất 2 lít nước mỗi ngày
- *         isCompleted:
- *           type: boolean
- *           default: false
  *         user:
  *           type: string
  *           description: ID của người dùng
