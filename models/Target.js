@@ -10,6 +10,14 @@ const targetSchema = new Schema({
         type: String,
         required: true,
     },
+    isCompleted: {
+        type: Boolean,
+        default: false,
+    },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+    }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Target', targetSchema);
