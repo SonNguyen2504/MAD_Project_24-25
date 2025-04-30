@@ -1,3 +1,22 @@
+const express = require('express');
+
+const router = express.Router();
+
+const {
+   createFood,
+   getAllFood,
+   getAllFoodSystem,
+   getAllFoodUser,
+   getFoodById,
+   updateFood,
+   deleteFood,
+   searchFoodByName,
+} = require('../controllers/FoodController.js');
+
+const { verifyToken } = require('../middlewares/auth.js');
+
+const { upload } = require('../middlewares/uploadImageMiddleware.js');
+
 /**
  * @swagger
  * tags:
@@ -36,22 +55,6 @@
  *           default: system
  */
 
-const express = require('express');
-
-const router = express.Router();
-
-const {
-   createFood,
-   getAllFood,
-   getAllFoodSystem,
-   getAllFoodUser,
-   getFoodById,
-   updateFood,
-   deleteFood,
-   searchFoodByName,
-} = require('../controllers/FoodController.js');
-const { verifyToken } = require('../middlewares/auth.js');
-
 /**
  * @swagger
  * /api/food:
@@ -63,14 +66,43 @@ const { verifyToken } = require('../middlewares/auth.js');
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/Food'
+ *             type: object
+ *             required:
+ *               - foodName
+ *               - unit
+ *               - calories
+ *               - protein
+ *               - carbs
+ *               - fats
+ *               - foodType 
+ *               - foodImage
+ *             properties:
+ *               foodName:
+ *                 type: string
+ *               unit:
+ *                 type: number
+ *               calories:
+ *                 type: number
+ *               protein:
+ *                 type: number
+ *               carbs:
+ *                 type: number
+ *               fats:
+ *                 type: number
+ *               foodType:
+ *                 type: string
+ *                 enum: [system, user]
+ *                 default: system
+ *               foodImage:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       200:
  *         description: Thêm thực phẩm thành công
  */
-router.post('/', verifyToken, createFood);
+router.post('/', upload.single('foodImage') ,verifyToken, createFood);
 
 /**
  * @swagger
@@ -174,14 +206,43 @@ router.get('/:id', verifyToken, getFoodById);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/Food'
+ *             type: object
+ *             required:
+ *               - foodName
+ *               - unit
+ *               - calories
+ *               - protein
+ *               - carbs
+ *               - fats
+ *               - foodType 
+ *               - foodImage
+ *             properties:
+ *               foodName:
+ *                 type: string
+ *               unit:
+ *                 type: number
+ *               calories:
+ *                 type: number
+ *               protein:
+ *                 type: number
+ *               carbs:
+ *                 type: number
+ *               fats:
+ *                 type: number
+ *               foodType:
+ *                 type: string
+ *                 enum: [system, user]
+ *                 default: system
+ *               foodImage:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       200:
  *         description: Cập nhật thành công
  */
-router.put('/:id', verifyToken, updateFood);
+router.put('/:id', upload.single('foodImage'), verifyToken, updateFood);
 
 /**
  * @swagger

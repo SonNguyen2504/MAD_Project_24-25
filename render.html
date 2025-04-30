@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>danh sach thuc pham</title>
+</head>
+
+<body>
+    <div id="foodlist"></div>
+
+
+    <script>
+        const getListFood = async () => {
+            const response = await fetch('http://localhost:3030/api/food', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+            });
+            const data = await response.json();
+
+            const foods = data.foods;
+
+            const foodListDiv = document.getElementById('foodlist');
+
+            foods.forEach(food => {
+                const foodDiv = document.createElement('div');
+                foodDiv.innerHTML = `
+                <h2>${food.foodName}</h2>
+                <p>Calories: ${food.calories}</p>
+                <p>Protein: ${food.protein}</p>
+                <p>fats: ${food.fats}</p>
+                <img src="${food.image}" alt="${food.foodName}" style="width: 100px; height: 100px;" />
+            `;
+                foodListDiv.appendChild(foodDiv);
+            });
+        }
+
+        getListFood();
+
+    </script>
+</body>
+
+</html>
