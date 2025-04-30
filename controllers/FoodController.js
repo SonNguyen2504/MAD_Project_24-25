@@ -1,7 +1,8 @@
 const Food = require('../models/Food');
 
 const createFood = async(req, res) => {
-    const { foodName, unit, calories, protein, carbs, fats, image, foodType } = req.body;
+    const { foodName, unit, calories, protein, carbs, fats, foodType } = req.body;
+    const fileUploaded = req.file;
 
     try {
         const newFood = new Food({
@@ -11,7 +12,7 @@ const createFood = async(req, res) => {
             protein,
             carbs,
             fats,
-            image,
+            image: fileUploaded.path,
             foodType: foodType || 'system',
         });
 
@@ -135,7 +136,8 @@ const getFoodById = async(req, res) => {
 
 const updateFood = async(req, res) => {
     const { id } = req.params;
-    const { foodName, unit, calories, protein, carbs, fats, image } = req.body;
+    const { foodName, unit, calories, protein, carbs, fats } = req.body;
+    const fileUploaded = req.file;
 
     try {
         const food = await Food.findByIdAndUpdate(id, {
@@ -145,7 +147,7 @@ const updateFood = async(req, res) => {
             protein,
             carbs,
             fats,
-            image,
+            image: fileUploaded.path,
         }, { new: true });
 
         if(!food) {
