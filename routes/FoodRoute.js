@@ -10,7 +10,8 @@ const {
    getFoodById,
    updateFood,
    deleteFood,
-   searchFoodByName,
+   searchFoodByNameUser,
+   searchFoodByNameSystem,
 } = require('../controllers/FoodController.js');
 
 const { verifyToken } = require('../middlewares/auth.js');
@@ -120,9 +121,9 @@ router.get('/', verifyToken, getAllFood);
 
 /**
  * @swagger
- * /api/food/search:
+ * /api/food/user-search:
  *   get:
- *     summary: Tìm kiếm thực phẩm theo tên
+ *     summary: Tìm kiếm thực phẩm theo tên (người dùng tạo)
  *     tags: [Food]
  *     security:
  *       - bearerAuth: []
@@ -137,7 +138,28 @@ router.get('/', verifyToken, getAllFood);
  *       200:
  *         description: Danh sách thực phẩm tìm thấy
  */
-router.get('/search', verifyToken, searchFoodByName);
+router.get('/user-search', verifyToken, searchFoodByNameUser);
+
+/**
+ * @swagger
+ * /api/food/system-search:
+ *   get:
+ *     summary: Tìm kiếm thực phẩm theo tên (hệ thống)
+ *     tags: [Food]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: foodName
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Tên thực phẩm cần tìm
+ *     responses:
+ *       200:
+ *         description: Danh sách thực phẩm tìm thấy
+ */
+router.get('/system-search', verifyToken, searchFoodByNameSystem);
 
 /**
  * @swagger
