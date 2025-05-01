@@ -25,6 +25,8 @@
 
             const foodListDiv = document.getElementById('foodlist');
 
+            const HOST = 'http://localhost:3030/'
+
             foods.forEach(food => {
                 const foodDiv = document.createElement('div');
                 foodDiv.innerHTML = `
@@ -32,7 +34,7 @@
                 <p>Calories: ${food.calories}</p>
                 <p>Protein: ${food.protein}</p>
                 <p>fats: ${food.fats}</p>
-                <img src="${food.image}" alt="${food.foodName}" style="width: 100px; height: 100px;" />
+                <img src="${HOST}${food.image}" alt="${food.foodName}" style="width: 100px; height: 100px;" />
             `;
                 foodListDiv.appendChild(foodDiv);
             });

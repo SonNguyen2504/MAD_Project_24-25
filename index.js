@@ -1,8 +1,9 @@
 const express = require('express');
-const dotenv = require('dotenv');
 const cors = require('cors');
-const passport = require('passport');
 const route = require('./routes/index.js');
+const path = require('path');
+const passport = require('passport');
+const dotenv = require('dotenv');
 
 require('./config/passport.js');
 const setupSwagger = require('./config/swagger.js');
@@ -18,6 +19,7 @@ app.use(cors({
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(passport.initialize());
 
 setupSwagger(app); // Setup Swagger for API documentation
