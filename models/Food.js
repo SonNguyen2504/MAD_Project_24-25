@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const removeTones = require('../middlewares/removeTones');
+
 const foodSchema = new Schema({
     foodName: {
         type: String,
@@ -36,6 +38,18 @@ const foodSchema = new Schema({
         type: String,
         required: true,
     },
+    foodNameNoAccent: {
+        type: String,
+    },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+    }
 }, { timestamps: true });
+
+foodSchema.pre('save', function(next) {
+    this.foodNameNoAccent = removeTones(this.foodName.toLowerCase());
+    next();
+});
 
 module.exports = mongoose.model('Food', foodSchema);
