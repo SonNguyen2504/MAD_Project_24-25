@@ -14,6 +14,7 @@ const mealSchema = new Schema({
     },
     foodsInMeal: [
         {
+            _id: false,
             food: {
                 type: Schema.Types.ObjectId,
                 ref: 'Food',
