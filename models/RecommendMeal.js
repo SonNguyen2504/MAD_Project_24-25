@@ -1,59 +1,81 @@
-const mongoose = require('mongoose');   
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const recommendMealSchema = new Schema({
-    target: {
-        type: Schema.Types.ObjectId,
-        ref: 'Target',
+    mealTarget: {
+        type: String,
+        enum: ['Giảm cân', 'Giữ cân', 'Tăng cân'],
+        required: true,
     },
     weekMeals: {
         monday: [
             {
-                type: Schema.Types.ObjectId,
-                ref: 'Meal',
-                required: true,
+                _id: false,
+                meal: {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Meal',
+                    required: true,
+                }
             },
         ],
         tuesday: [
             {
-                type: Schema.Types.ObjectId,
-                ref: 'Meal',
-                required: true,
+                _id: false,
+                meal: {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Meal',
+                    required: true,
+                }
             },
         ],
         wednesday: [
             {
-                type: Schema.Types.ObjectId,
-                ref: 'Meal',
-                required: true,
+                _id: false,
+                meal: {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Meal',
+                    required: true,
+                }
             },
         ],
         thursday: [
             {
-                type: Schema.Types.ObjectId,
-                ref: 'Meal',
-                required: true,
+                _id: false,
+                meal: {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Meal',
+                    required: true,
+                }
             },
         ],
         friday: [
             {
-                type: Schema.Types.ObjectId,
-                ref: 'Meal',
-                required: true,
+                _id: false,
+                meal: {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Meal',
+                    required: true,
+                }
             },
         ],
         saturday: [
             {
-                type: Schema.Types.ObjectId,
-                ref: 'Meal',
-                required: true,
+                _id: false,
+                meal: {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Meal',
+                    required: true,
+                }
             },
         ],
         sunday: [
             {
-                type: Schema.Types.ObjectId,
-                ref: 'Meal',
-                required: true,
+                _id: false,
+                meal: {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Meal',
+                    required: true,
+                }
             },
         ],
     }
