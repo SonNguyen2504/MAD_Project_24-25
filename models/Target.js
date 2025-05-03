@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const targetSchema = new Schema({
-    targetName: {
+    targetName: { // chốt có làm enum hay không
         type: String,
+        enum: ['Cân nặng', 'Bước chân'],
         required: true,
     },
     content: {
