@@ -153,7 +153,9 @@ const updateFood = async(req, res) => {
         food.protein = protein;
         food.carbs = carbs;
         food.fats = fats;
-        food.image = fileUploaded.path;
+        if (fileUploaded) {
+            food.image = fileUploaded.path;
+        }
 
         await food.save();
 
