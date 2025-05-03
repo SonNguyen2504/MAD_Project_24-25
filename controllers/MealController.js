@@ -10,22 +10,26 @@ const getMondayOfWeek = (date) => {
     return date;
 }
 
+const calculateTotalCalories = async (foodsInMeal) => {
+    let totalCalories = 0;
+    for (const foodItem of foodsInMeal) {
+        const food = await Food.findById(foodItem.food);
+        if (!food) {
+            return res.status(404).json({ message: 'Food not found' });
+        }
+        totalCalories += food.calories * (foodItem.quantity / food.unit);
+    }
+    return totalCalories;
+}
+
 const createMeal = async(req, res) => {
     const { session, foodsInMeal } = req.body;
     try {
         const user = req.user._id;
         const meal = new Meal({ user, session, foodsInMeal });
-        let totalCalories = 0;
 
-        for (const foodItem of foodsInMeal) {
-            const food = await Food.findById(foodItem.food);
-            if (!food) {
-                return res.status(404).json({ message: 'Food not found' });
-            }
-            totalCalories += food.calories * (foodItem.quantity / 100);
-        }
+        meal.totalCalories = await calculateTotalCalories(foodsInMeal);
 
-        meal.totalCalories = totalCalories;
         await meal.save();
 
         console.log('Meal created:', meal);
@@ -148,10 +152,139 @@ const getMealsInWeekFromMonday = async (req, res) => {
     }
 };
 
+const addFoodToMeal = async (req, res) => {
+    const { id } = req.params;
+    const { foodId, quantity } = req.body;
+    
+    try {
+        const meal = await Meal.findById(id);
+        if (!meal) {
+            return res.status(404).json({
+                success: false,
+                message: 'Meal not found',
+            });
+        }
+
+        const food = await Food.findById(foodId);
+        if (!food) {
+            return res.status(404).json({
+                success: false,
+                message: 'Food not found',
+            });
+        }
+
+        const foodInMeal = meal.foodsInMeal.find(food => food.food.toString() === foodId);
+        if (foodInMeal) {
+            return res.status(400).json({
+                success: false,
+                message: 'Food already exists in meal',
+            });  
+        } else {
+            meal.foodsInMeal.push({ food: foodId, quantity });
+        }
+
+        meal.totalCalories = await calculateTotalCalories(meal.foodsInMeal);
+
+        await meal.save();
+
+        return res.status(200).json({
+            success: true,
+            message: 'Food added to meal successfully',
+            data: meal,
+        });
+    } catch (error) {
+        console.error('Error adding food to meal:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message,
+        });
+    }
+}
+
+const updateFoodInMeal = async (req, res) => {
+    const { id } = req.params;
+    const { foodId, quantity } = req.body;
+    
+    try {
+        const meal = await Meal.findById(id);
+        if (!meal) {
+            return res.status(404).json({
+                success: false,
+                message: 'Meal not found',
+            });
+        }
+
+        const foodInMeal = meal.foodsInMeal.find(food => food.food.toString() === foodId);
+        if (!foodInMeal) {
+            return res.status(404).json({
+                success: false,
+                message: 'Food not found in meal',
+            });
+        }
+
+        foodInMeal.quantity = quantity;
+        
+        meal.totalCalories = await calculateTotalCalories(meal.foodsInMeal);
+
+        await meal.save();
+
+        return res.status(200).json({
+            success: true,
+            message: 'Food updated in meal successfully',
+            data: meal,
+        });
+    } catch (error) {
+        console.error('Error updating meal:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message,
+        });
+    }
+}
+
+const deleteFoodInMeal = async (req, res) => {
+    const { id } = req.params;
+    const { foodId } = req.body;
+
+    try {
+        const meal = await Meal.findById(id);
+        if (!meal) {
+            return res.status(404).json({
+                success: false,
+                message: 'Meal not found',
+            });
+        }
+
+        meal.foodsInMeal = meal.foodsInMeal.filter(food => food.food.toString() !== foodId);
+        
+        meal.totalCalories = await calculateTotalCalories(meal.foodsInMeal);
+
+        await meal.save();
+
+        return res.status(200).json({
+            success: true,
+            message: 'Food deleted from meal successfully',
+            data: meal,
+        });
+    } catch (error) {
+        console.error('Error deleting food in meal:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message,
+        });
+    }
+}
+
 
 module.exports = {
     createMeal,
     getMealById,
     getMealsByUserToday,
     getMealsInWeekFromMonday,
+    addFoodToMeal,
+    updateFoodInMeal,
+    deleteFoodInMeal,
 }

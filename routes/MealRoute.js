@@ -6,6 +6,9 @@ const {
     getMealById,
     getMealsByUserToday,
     getMealsInWeekFromMonday,
+    addFoodToMeal,
+    updateFoodInMeal,
+    deleteFoodInMeal,
 } = require('../controllers/MealController');
 
 const { verifyToken } = require('../middlewares/auth');
@@ -136,5 +139,107 @@ router.get('/week', verifyToken, getMealsInWeekFromMonday);
  *         description: Chi tiết bữa ăn
  */
 router.get('/:id', verifyToken, getMealById);
+
+/**
+ * @swagger
+ * /api/meal/add-food/{id}:
+ *   post:
+ *     summary: Thêm món ăn vào bữa ăn theo ID
+ *     tags: [Meal]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID của bữa ăn
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - foodId
+ *               - quantity
+ *             properties:
+ *               foodId:
+ *                 type: string
+ *               quantity:
+ *                 type: number
+ *     responses:
+ *       200:
+ *         description: Chi tiết bữa ăn
+ */
+router.post('/add-food/:id', verifyToken, addFoodToMeal);
+
+/**
+ * @swagger
+ * /api/meal/update-food/{id}:
+ *   put:
+ *     summary: Chỉnh sửa món ăn trong bữa ăn theo ID
+ *     tags: [Meal]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID của bữa ăn
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - foodId
+ *               - quantity
+ *             properties:
+ *               foodId:
+ *                 type: string
+ *               quantity:
+ *                 type: number
+ *     responses:
+ *       200:
+ *         description: Chi tiết bữa ăn
+ */
+router.put('/update-food/:id', verifyToken, updateFoodInMeal);
+
+/**
+ * @swagger
+ * /api/meal/delete-food/{id}:
+ *   delete:
+ *     summary: Xóa món ăn khỏi bữa ăn theo ID
+ *     tags: [Meal]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID của bữa ăn
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - foodId
+ *             properties:
+ *               foodId:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Chi tiết bữa ăn
+ */
+router.delete('/delete-food/:id', verifyToken, deleteFoodInMeal);
 
 module.exports = router;
