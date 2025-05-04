@@ -59,6 +59,8 @@ const { verifyToken } = require('../middlewares/auth.js');
  *         weightGoal:
  *           type: number
  *           example: 60
+ *         recommedMeals:
+ *           type: string
  * 
  *     ChangePassword:
  *       type: object

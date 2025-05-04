@@ -2,7 +2,7 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 
 const setInformation = async (req, res) => {
-    const { height, weight, gender, age, bmi, target, bodyState, weightGoal, dailyCalorieTarget, activityLevel } = req.body;
+    const { height, weight, gender, age, bmi, target, bodyState, weightGoal, dailyCalorieTarget, activityLevel, recommendMeals } = req.body;
 
     try {
         const user = await User.findById(req.user._id).select('-password -verificationCode -isVerify');
@@ -21,6 +21,7 @@ const setInformation = async (req, res) => {
         user.weightGoal = weightGoal;
         user.isFirstLogin = false;
         user.activityLevel = activityLevel;
+        user.recommendMeals = recommendMeals;
 
         await user.save();
 
