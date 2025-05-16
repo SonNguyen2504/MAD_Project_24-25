@@ -65,7 +65,17 @@ const getUserInformation = async (req, res) => {
 
 const updateUserInformation = async (req, res) => {
     const id = req.user._id;
-    const { username, height, weight, gender, age, bmi, weightGoal, activityLevel } = req.body;
+    const { username, 
+        height, 
+        weight, 
+        gender, 
+        age, 
+        bmi, 
+        weightGoal, 
+        activityLevel,
+        target,
+        bodyState,
+        dailyCalorieTarget } = req.body;
 
     try {
         const user = await User.findById(id).select('-password -verificationCode -isVerify');
@@ -81,6 +91,9 @@ const updateUserInformation = async (req, res) => {
         user.bmi = bmi;
         user.weightGoal = weightGoal;
         user.activityLevel = activityLevel;
+        user.target = target;
+        user.bodyState = bodyState;
+        user.dailyCalorieTarget = dailyCalorieTarget;
         await user.save();
 
         return res.status(200).json({
