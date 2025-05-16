@@ -144,7 +144,7 @@ router.get('/:id', verifyToken, getMealById);
  * @swagger
  * /api/meal/add-food/{id}:
  *   post:
- *     summary: Thêm món ăn vào bữa ăn theo ID
+ *     summary: Thêm nhiều món ăn vào bữa ăn theo ID
  *     tags: [Meal]
  *     security:
  *       - bearerAuth: []
@@ -162,17 +162,45 @@ router.get('/:id', verifyToken, getMealById);
  *           schema:
  *             type: object
  *             required:
- *               - foodId
- *               - quantity
+ *               - foodsInMeal
  *             properties:
- *               foodId:
- *                 type: string
- *               quantity:
- *                 type: number
+ *               foodsInMeal:
+ *                 type: array
+ *                 description: Danh sách món ăn và số lượng cần thêm
+ *                 items:
+ *                   type: object
+ *                   required:
+ *                     - food
+ *                     - quantity
+ *                   properties:
+ *                     food:
+ *                       type: string
+ *                       description: ID món ăn
+ *                     quantity:
+ *                       type: number
+ *                       description: Số lượng món ăn
  *     responses:
  *       200:
- *         description: Chi tiết bữa ăn
+ *         description: Chi tiết bữa ăn sau khi thêm món
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *       400:
+ *         description: Món ăn đã tồn tại trong bữa ăn
+ *       404:
+ *         description: Không tìm thấy bữa ăn hoặc món ăn
+ *       500:
+ *         description: Lỗi máy chủ
  */
+
 router.post('/add-food/:id', verifyToken, addFoodToMeal);
 
 /**
