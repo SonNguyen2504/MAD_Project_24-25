@@ -6,6 +6,7 @@ const {
     getMealById,
     getMealsByUserToday,
     getMealsInWeekFromMonday,
+    getCaloriesPerDayInWeekFromMonday,
     addFoodToMeal,
     updateFoodInMeal,
     deleteFoodInMeal,
@@ -118,6 +119,20 @@ router.get('/today', verifyToken, getMealsByUserToday);
  *         description: Danh sách bữa ăn trong tuần
  */
 router.get('/week', verifyToken, getMealsInWeekFromMonday);
+
+/**
+ * @swagger
+ * /api/meal/week/calories:
+ *   get:
+ *     summary: Lấy tổng calo từng ngày trong tuần từ thứ 2 đến hôm nay
+ *     tags: [Meal]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Tổng calo từng ngày trong tuần từ thứ 2 đến hôm nay
+ */
+router.get('/week/calories', verifyToken, getCaloriesPerDayInWeekFromMonday);
 
 /**
  * @swagger

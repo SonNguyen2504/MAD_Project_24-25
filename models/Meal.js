@@ -5,7 +5,6 @@ const mealSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User',
-        required: true,
     },
     session: {
         type: String,

@@ -15,7 +15,7 @@ const calculateTotalCalories = async (foodsInMeal) => {
     for (const foodItem of foodsInMeal) {
         const food = await Food.findById(foodItem.food);
         if (!food) {
-            return res.status(404).json({ message: 'Food not found' });
+            throw new Error(`Food with ID ${foodItem.food} not found`);
         }
         totalCalories += food.calories * (foodItem.quantity / food.unit);
     }
@@ -42,7 +42,7 @@ const createMeal = async (req, res) => {
     } catch (error) {
         return res.status(500).json({
             success: false,
-            message: 'Internal server error',
+            message: 'Lỗi khi tạo bữa ăn',
             error: error.message,
         });
     }
@@ -151,6 +151,45 @@ const getMealsInWeekFromMonday = async (req, res) => {
         });
     }
 };
+
+const getCaloriesPerDayInWeekFromMonday = async (req, res) => {
+    const mondayOfWeek = getMondayOfWeek(new Date());
+    const today = new Date()
+    today.setHours(23, 59, 59, 999);
+
+    try {
+        const meals = await Meal.find({
+            user: req.user._id,
+            createdAt: {
+                $gte: mondayOfWeek,
+                $lte: today,
+            },
+        });
+
+        const caloriesPerDay = Array(7).fill(0);
+
+        meals.forEach(meal => {
+            const createdDate = new Date(meal.createdAt);
+            const dayOffset = Math.floor((createdDate - mondayOfWeek) / (1000 * 60 * 60 * 24));
+            if (dayOffset >= 0 && dayOffset <= 6) {
+                caloriesPerDay[dayOffset] += meal.totalCalories;
+            }
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: 'Calories per day in week retrieved successfully',
+            data: caloriesPerDay,
+        });
+    } catch (error) {
+        console.error('Error retrieving meals:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message,
+        });
+    }
+}
 
 const addFoodToMeal = async (req, res) => {
     const { id } = req.params;
@@ -293,6 +332,7 @@ module.exports = {
     getMealById,
     getMealsByUserToday,
     getMealsInWeekFromMonday,
+    getCaloriesPerDayInWeekFromMonday,
     addFoodToMeal,
     updateFoodInMeal,
     deleteFoodInMeal,
