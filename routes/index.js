@@ -5,6 +5,7 @@ const MealRoute = require('./MealRoute');
 const NoteRoute = require('./NoteRoute');
 const TargetRoute = require('./TargetRoute');
 const AchievementRoute = require('./AchievementRoute');
+const RecommendMealRoute = require('./RecommendMealRoute');
 
 const route = (app) => {
     app.use('/api/auth', AuthRoute);
@@ -14,6 +15,7 @@ const route = (app) => {
     app.use('/api/note', NoteRoute);
     app.use('/api/target', TargetRoute);
     app.use('/api/achievement', AchievementRoute);
+    app.use('/api/recommend-meal', RecommendMealRoute);
 }
 
 module.exports = route;
