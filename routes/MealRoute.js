@@ -5,6 +5,7 @@ const {
     createMeal,
     getMealById,
     getMealsByUserToday,
+    getMealsByDay,
     getMealsInWeekFromMonday,
     getCaloriesPerDayInWeekFromMonday,
     addFoodToMeal,
@@ -105,6 +106,30 @@ router.post('/', verifyToken, createMeal);
  *         description: Danh sách bữa ăn hôm nay
  */
 router.get('/today', verifyToken, getMealsByUserToday);
+
+/**
+ * @swagger
+ * /api/meal/day/{day}:
+ *   get:
+ *     summary: Lấy danh sách bữa ăn của người dùng theo ngày
+ *     tags: [Meal]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: day
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Ngày cần lấy bữa ăn (định dạng YYYY-MM-DD)
+ *     responses:
+ *       200:
+ *         description: Lấy thành công danh sách bữa ăn trong ngày
+ *       500:
+ *         description: Lỗi máy chủ
+ */
+router.get('/day/:day', verifyToken, getMealsByDay);
 
 /**
  * @swagger
