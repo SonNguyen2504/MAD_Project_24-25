@@ -104,6 +104,37 @@ const getMealsByUserToday = async (req, res) => {
     }
 }
 
+const getMealsByDay = async (req, res) => {
+    const { day } = req.params;
+    // console.log('Date:', day);
+    const selectedDate = new Date(day);
+    selectedDate.setHours(0, 0, 0, 0);
+
+    try {
+        const meals = await Meal.find({
+            user: req.user._id,
+            createdAt: {
+                $gte: selectedDate,
+                $lt: new Date(selectedDate.getTime() + 24 * 60 * 60 * 1000),
+            },
+        }).populate('foodsInMeal.food');
+
+        return res.status(200).json({
+            totalMeals: meals.length,
+            success: true,
+            message: 'Meals of selected date retrieved successfully',
+            data: meals,
+        });
+    } catch (error) {
+        console.error('Error retrieving meals:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message,
+        });
+    }
+}
+
 const getMealsInWeekFromMonday = async (req, res) => {
     const mondayOfWeek = getMondayOfWeek(new Date());
     const today = new Date()
@@ -331,6 +362,7 @@ module.exports = {
     createMeal,
     getMealById,
     getMealsByUserToday,
+    getMealsByDay,
     getMealsInWeekFromMonday,
     getCaloriesPerDayInWeekFromMonday,
     addFoodToMeal,
