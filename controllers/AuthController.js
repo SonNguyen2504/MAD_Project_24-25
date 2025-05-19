@@ -152,6 +152,7 @@ const login = async (req, res) => {
             success: true,
             message: 'Đăng nhập thành công!',
             token,
+            isFirstLogin: user.isFirstLogin,
         });
     } catch (error) {
         return res.status(500).json({
