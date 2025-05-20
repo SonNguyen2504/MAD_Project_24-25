@@ -15,6 +15,11 @@ const tipSchema = new Schema({
         type: String,
         required: true,
     },
+    target: {
+        type: String,
+        enum: ['Giảm cân', 'Giữ cân', 'Tăng cân'],
+        required: true,
+    },
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User',
