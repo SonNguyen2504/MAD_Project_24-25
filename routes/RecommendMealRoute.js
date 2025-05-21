@@ -6,6 +6,7 @@ const {
     getAllRecommendMeals,
     getRecommendMealForUserToday,
     getCaloriesPerDayInWeek,
+    getRecommendMealBaseOnUserInfo,
 } = require('../controllers/RecommendMealController');
 
 const { verifyToken } = require('../middlewares/auth');
@@ -144,10 +145,42 @@ const { verifyToken } = require('../middlewares/auth');
  *         description: Lỗi máy chủ
  */
 
+/**
+ * @swagger
+ * /api/recommend-meal/recommend:
+ *   get:
+ *     summary: Lấy thực đơn gợi ý dựa trên mục tiêu và lượng calo của người dùng
+ *     tags: [RecommendMeal]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: target
+ *         required: true
+ *         schema:
+ *           type: string
+ *           enum: [Giảm cân, Giữ cân, Tăng cân]
+ *         description: Mục tiêu ăn uống của người dùng
+ *       - in: query
+ *         name: dailyCalorieTarget
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: Lượng calo mục tiêu mỗi ngày của người dùng
+ *     responses:
+ *       200:
+ *         description: Lấy thực đơn gợi ý thành công
+ *       404:
+ *         description: Không tìm thấy thực đơn gợi ý
+ *       500:
+ *         description: Lỗi máy chủ nội bộ
+ */
+
 
 router.post('/', createRecommendMeal);
 router.get('/all', getAllRecommendMeals);
 router.get('/today', verifyToken, getRecommendMealForUserToday);
 router.get('/calories', verifyToken, getCaloriesPerDayInWeek);
+router.get('/recommend', verifyToken, getRecommendMealBaseOnUserInfo);
 
 module.exports = router;
