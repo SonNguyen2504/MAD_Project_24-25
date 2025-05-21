@@ -135,6 +135,47 @@ const getCaloriesPerDayInWeek = async (req, res) => {
     }
 };
 
+const getRecommendMealBaseOnUserInfo = async (req, res) => {
+    const { target, dailyCalorieTarget } = req.query;
+
+    try {
+        const recommendMeals = await RecommendMeal.find({
+            mealTarget: target,
+        });
+
+        if (!recommendMeals || recommendMeals.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy thực đơn gợi ý cho mục tiêu này',
+            });
+        }
+
+        // Tìm thực đơn có dailyCalorieTarget gần nhất
+        let closestMeal = recommendMeals[0];
+        let minDifference = Math.abs(closestMeal.dailyCalorieTarget - dailyCalorieTarget);
+
+        for (let i = 1; i < recommendMeals.length; i++) {
+            const currentDifference = Math.abs(recommendMeals[i].dailyCalorieTarget - dailyCalorieTarget);
+            if (currentDifference < minDifference) {
+                closestMeal = recommendMeals[i];
+                minDifference = currentDifference;
+            }
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: 'Lấy thực đơn gợi ý thành công',
+            recommendMeal: closestMeal,
+            recommendMealId: closestMeal._id,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Lỗi máy chủ nội bộ',
+            error: error.message,
+        });
+    }
+}
 
 
 module.exports = {
@@ -142,4 +183,5 @@ module.exports = {
     getAllRecommendMeals,
     getRecommendMealForUserToday,
     getCaloriesPerDayInWeek,
+    getRecommendMealBaseOnUserInfo,
 }
