@@ -15,12 +15,34 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-const sendVerificationCode = async(email, verificationCode) => {
+const sendVerificationCode = async (email, verificationCode) => {
     const mailOptions = {
         from: process.env.EMAIL_USER,
         to: email,
         subject: 'Xác thực Email',
         text: `Mã xác thực đăng ký tài khoản của bạn là: ${verificationCode}`,
+        html: `
+            <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 32px auto; border: 3px solid #34A751; border-radius: 20px; box-shadow: 0 6px 24px rgba(52,167,81,0.13); padding: 36px 28px 28px 28px; background: #fff;">
+                <div style="text-align:center;margin-bottom:24px;">
+                    <img src="https://res.cloudinary.com/dwox8wsue/image/upload/v1747926592/logo_jfaxd5.jpg" alt="Nutri4Life" style="height:90px;" />
+                </div>
+                <h1 style="color: #34A751; font-size: 2.1rem; margin-bottom: 12px; text-align:center;">Chào mừng bạn đến với Nutri4Life!</h1>
+                <h2 style="color: #222; font-size: 1.3rem; margin-bottom: 10px; text-align:center;">Cảm ơn bạn đã đăng ký tài khoản.</h2>
+                <h3 style="font-size: 1.15rem; color: #222; margin-bottom: 8px; text-align:center;">Mã xác thực đăng ký tài khoản của bạn là:</h3>
+                <div style="text-align:center;">
+                    <div style="background: #f5f5f5; font-size: 2.2rem; font-weight: bold; color: #34A751; letter-spacing: 6px; margin: 18px 0; padding: 16px 36px; border-radius: 10px; border: 3px solid #888; display: inline-block; min-width: 180px; text-align: center;">
+                        ${verificationCode}
+                    </div>
+                </div>
+                <p style="color: #222; font-size: 1.05rem; margin-top: 18px; text-align:center;">
+                    Vui lòng nhập mã này để hoàn tất quá trình đăng ký.
+                </p>
+                <hr style="margin: 28px 0 14px 0; border: none; border-top: 2px solid #eee;">
+                <p style="font-size: 0.95rem; color: #888; text-align:center;">
+                    Nếu bạn không thực hiện yêu cầu này, vui lòng bỏ qua email này.
+                </p>
+            </div>
+        `
     };
 
     try {
@@ -37,6 +59,32 @@ const sendForgotPasswordCode = async (email, forgotPasswordCode) => {
         to: email,
         subject: 'Yêu cầu đổi mật khẩu',
         text: `Mã xác thực yêu cầu đổi mật khẩu của bạn là: ${forgotPasswordCode}`,
+        html: `
+            <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 32px auto; border: 3px solid #f56c6c; border-radius: 20px; box-shadow: 0 6px 24px rgba(245,108,108,0.13); padding: 36px 28px 28px 28px; background: #fff;">
+                <div style="text-align:center;margin-bottom:24px;">
+                    <img src="https://res.cloudinary.com/dwox8wsue/image/upload/v1747926592/logo_jfaxd5.jpg" alt="Nutri4Life" style="height:90px;" />
+                </div>
+                <h1 style="color: #f56c6c; font-size: 2rem; margin-bottom: 12px; text-align:center;">Yêu cầu đổi mật khẩu</h1>
+                <p style="color: #222; font-size: 1.1rem; margin-bottom: 8px; text-align:center;">
+                    <b>Bạn vừa yêu cầu đổi mật khẩu cho tài khoản Nutri4Life.</b>
+                </p>
+                <p style="font-size: 1.1rem; color: #222; margin-bottom: 8px; text-align:center;">
+                    <b>Mã xác thực đổi mật khẩu của bạn là:</b>
+                </p>
+                <div style="text-align:center;">
+                    <div style="background: #f5f5f5; font-size: 2.2rem; font-weight: bold; color: #f56c6c; letter-spacing: 6px; margin: 18px 0; padding: 16px 36px; border-radius: 10px; border: 3px solid #888; display: inline-block; min-width: 180px; text-align: center;">
+                        ${forgotPasswordCode}
+                    </div>
+                </div>
+                <p style="color: #222; font-size: 1.05rem; margin-top: 18px; text-align:center;">
+                    Vui lòng nhập mã này để tiếp tục quá trình đổi mật khẩu.
+                </p>
+                <hr style="margin: 28px 0 14px 0; border: none; border-top: 2px solid #eee;">
+                <p style="font-size: 0.95rem; color: #888; text-align:center;">
+                    Nếu bạn không thực hiện yêu cầu này, vui lòng bỏ qua email này.
+                </p>
+            </div>
+        `
     };
 
     try {
@@ -79,7 +127,7 @@ const signup = async (req, res) => {
         // Send the verification code to the user's email
         await sendVerificationCode(email, verificationCode);
 
-        return res.status(200).json({ 
+        return res.status(200).json({
             success: true,
             message: 'Thông tin của bạn đã được lưu, vui lòng kiểm tra email để xác thực tài khoản!',
         });
@@ -108,10 +156,10 @@ const verifyAccount = async (req, res) => {
 
         await existingUser.save();
 
-        return res.status(200).json({ 
+        return res.status(200).json({
             success: true,
             message: 'Xác thực tài khoản thành công!',
-            user: existingUser, 
+            user: existingUser,
         });
     } catch (error) {
         console.error('Lỗi xác thực tài khoản: ', error);
@@ -143,12 +191,12 @@ const login = async (req, res) => {
 
         // Generate JWT token
         const token = jwt.sign(
-            { userId: user._id }, 
-            process.env.TOKEN_KEY, 
+            { userId: user._id },
+            process.env.TOKEN_KEY,
             { expiresIn: '1h' }
         );
 
-        return res.status(200).json({ 
+        return res.status(200).json({
             success: true,
             message: 'Đăng nhập thành công!',
             token,
@@ -185,7 +233,7 @@ const getForgotPasswordCode = async (req, res) => {
         // Send the verification code to the user's email
         await sendForgotPasswordCode(email, forgotPasswordCode);
 
-        return res.status(200).json({ 
+        return res.status(200).json({
             success: true,
             message: 'Mã xác thực đổi mật khẩu đã được gửi đến email của bạn!',
         });
@@ -199,7 +247,7 @@ const getForgotPasswordCode = async (req, res) => {
     }
 }
 
-const resetPassword = async(req, res) => {
+const resetPassword = async (req, res) => {
     const { email, forgotPasswordCode, newPassword } = req.body;
 
     try {
@@ -214,7 +262,7 @@ const resetPassword = async(req, res) => {
 
         await existingUser.save();
 
-        return res.status(200).json({ 
+        return res.status(200).json({
             success: true,
             message: 'Đổi mật khẩu thành công!',
         });
@@ -234,7 +282,7 @@ const resendVerificationCode = async (req, res) => {
     try {
         const existingUser = await User.findOne({ email });
 
-        if(!existingUser) {
+        if (!existingUser) {
             return res.status(400).json({ message: 'Email không tồn tại' });
         }
 
@@ -250,7 +298,7 @@ const resendVerificationCode = async (req, res) => {
             message: 'Mã xác thực đã được gửi lại đến email của bạn!',
         })
 
-    } catch(error) {
+    } catch (error) {
         return res.status(500).json({
             success: false,
             message: 'Internal server error',
@@ -265,7 +313,7 @@ const resendForgotPasswordCode = async (req, res) => {
     try {
         const existingUser = await User.findOne({ email });
 
-        if(!existingUser) {
+        if (!existingUser) {
             return res.status(400).json({ message: 'Email không tồn tại' });
         }
 
@@ -289,8 +337,8 @@ const resendForgotPasswordCode = async (req, res) => {
 
 const googleCallback = async (req, res) => {
     const token = jwt.sign(
-        { userId: req.user._id }, 
-        process.env.TOKEN_KEY, 
+        { userId: req.user._id },
+        process.env.TOKEN_KEY,
         { expiresIn: '1h' }
     );
 
