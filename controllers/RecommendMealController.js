@@ -2,12 +2,13 @@ const RecommendMeal = require('../models/RecommendMeal');
 const User = require('../models/User');
 
 const createRecommendMeal = async (req, res) => {
-    const { mealTarget, weekMeals } = req.body;
+    const { mealTarget, weekMeals, dailyCalorieTarget } = req.body;
 
     try {
         const newRecommendMeal = new RecommendMeal({
             mealTarget,
             weekMeals,
+            dailyCalorieTarget,
         });
 
         await newRecommendMeal.save();
