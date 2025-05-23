@@ -20,6 +20,7 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 
 setupSwagger(app); // Setup Swagger for API documentation
