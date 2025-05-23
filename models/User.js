@@ -61,7 +61,7 @@ const userSchema = new Schema({
     },
     activityLevel: {
         type: String,
-        enum: ['Ít vận động', 'Vận động nhẹ', 'Vận động vừa', 'Vận động nhiều', 'Rất năng động'],
+        enum: ['Ít vận động (Ngồi nhiều)', 'Vận động nhẹ', 'Vận động vừa', 'Vận động nhiều', 'Rất năng động'],
     },
     isVerify: {
         type: Boolean,
